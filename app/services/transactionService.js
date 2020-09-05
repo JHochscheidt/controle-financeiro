@@ -6,3 +6,15 @@ const ObjectId = mongoose.Types.ObjectId;
 // o servidor é Linux, isso faz diferença. Gastei umas boas horas tentando
 // descobrir esse erro :-/
 const TransactionModel = require('../models/TransactionModel');
+
+const findAll = async () => {
+  try {
+    const transactions = await TransactionModel.find({});
+    console.log(transactions);
+    return transactions;
+  } catch (err) {
+    console.log('erro em findAll');
+  }
+};
+
+module.exports = findAll;
