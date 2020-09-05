@@ -47,4 +47,16 @@ transactionRouter.patch('/:id', async (req, res) => {
   }
 });
 
+//remove transacao de acordo com o id passado por parametro
+transactionRouter.delete('/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const deletedTransaction = await TransactionService.deleteTransaction(id);
+    res.send(deletedTransaction);
+  } catch (err) {
+    res.send(err);
+  }
+});
+
 module.exports = transactionRouter;

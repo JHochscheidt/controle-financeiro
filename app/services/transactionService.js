@@ -10,10 +10,9 @@ const TransactionModel = require('../models/TransactionModel');
 // filtra transactions por yyyy-dd
 exports.findTransactionByPeriod = async (period) => {
   try {
-    const transactions = await TransactionModel.find(
-      { $or: [{ yearMonth: period }, { yearMonthDay: period }] },
-      { _id: 0 }
-    );
+    const transactions = await TransactionModel.find({
+      $or: [{ yearMonth: period }, { yearMonthDay: period }],
+    });
     return transactions;
   } catch (err) {
     console.log('erro em findAll');
@@ -41,6 +40,15 @@ exports.updateTransaction = async (id, updateFields) => {
       { new: true }
     );
     return updatedTransaction;
+  } catch (err) {
+    return err;
+  }
+};
+
+//deleta transacao de acordo com id
+exports.deleteTransaction = async (id) => {
+  try {
+    const deletedTransaction = await TransactionModel.deleteOne({ _id: id });
   } catch (err) {
     return err;
   }
