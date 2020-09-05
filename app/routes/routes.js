@@ -2,6 +2,7 @@ const express = require('express');
 const transactionRouter = express.Router();
 const TransactionService = require('../services/transactionService');
 const TransactionModel = require('../models/TransactionModel');
+const { reset } = require('nodemon');
 
 //retorna transaction de acordo com a queryParam yyyy-dd (ano-mes)
 //se nao for passado periodo por parametro nao retorna nada
@@ -54,6 +55,15 @@ transactionRouter.delete('/:id', async (req, res) => {
   try {
     const deletedTransaction = await TransactionService.deleteTransaction(id);
     res.send(deletedTransaction);
+  } catch (err) {
+    res.send(err);
+  }
+});
+
+transactionRouter.delete('/', async (req, res) => {
+  try {
+    const deleteAll = await TransactionModel.deleteMany({});
+    res.end();
   } catch (err) {
     res.send(err);
   }
