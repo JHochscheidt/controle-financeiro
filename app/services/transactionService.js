@@ -7,11 +7,11 @@ const ObjectId = mongoose.Types.ObjectId;
 // descobrir esse erro :-/
 const TransactionModel = require('../models/TransactionModel');
 
-const findTransactionByPeriod = async (period) => {
+// filtra transactions por yyyy-dd
+exports.findTransactionByPeriod = async (period) => {
   try {
-    console.log(period);
     const transactions = await TransactionModel.find(
-      { yearMonth: period },
+      { $or: [{ yearMonth: period }, { yearMonthDay: period }] },
       { _id: 0 }
     );
     return transactions;
@@ -20,4 +20,13 @@ const findTransactionByPeriod = async (period) => {
   }
 };
 
-module.exports = findTransactionByPeriod;
+exports.createTransaction = async (newTransaction) => {
+  try {
+    const insertedTransaction = new TransactionModel(newTransaction);
+    await insertedTransaction.save();
+    return insertedTransaction;
+  } catch (err) {
+    console.log(err);
+    return;
+  }
+};
