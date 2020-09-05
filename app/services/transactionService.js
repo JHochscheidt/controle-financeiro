@@ -20,6 +20,7 @@ exports.findTransactionByPeriod = async (period) => {
   }
 };
 
+//cria nova transacao
 exports.createTransaction = async (newTransaction) => {
   try {
     const insertedTransaction = new TransactionModel(newTransaction);
@@ -28,5 +29,19 @@ exports.createTransaction = async (newTransaction) => {
   } catch (err) {
     console.log(err);
     return;
+  }
+};
+
+//atualiza os campos passados pelo req.body de uma transacao
+exports.updateTransaction = async (id, updateFields) => {
+  try {
+    const updatedTransaction = TransactionModel.updateOne(
+      { _id: id },
+      updateFields,
+      { new: true }
+    );
+    return updatedTransaction;
+  } catch (err) {
+    return err;
   }
 };

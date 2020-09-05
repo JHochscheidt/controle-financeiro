@@ -18,7 +18,7 @@ transactionRouter.get('/', async (req, res) => {
   }
 });
 
-//cria nov transaction
+//cria nova transaction
 transactionRouter.post('/', async (req, res) => {
   const newTransaction = req.body;
   if (!newTransaction) res.send('Informe os dados da nova transaction');
@@ -27,6 +27,21 @@ transactionRouter.post('/', async (req, res) => {
       newTransaction
     );
     res.send(InsertedTransaction);
+  } catch (err) {
+    res.send(err);
+  }
+});
+
+//atualiza uma transaction, de acordo com os campos passados por parametro
+transactionRouter.patch('/:id', async (req, res) => {
+  const updateFields = req.body;
+  const { id } = req.params;
+  try {
+    const updatedTransaction = await TransactionService.updateTransaction(
+      id,
+      updateFields
+    );
+    res.send(updatedTransaction);
   } catch (err) {
     res.send(err);
   }
