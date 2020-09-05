@@ -7,14 +7,17 @@ const ObjectId = mongoose.Types.ObjectId;
 // descobrir esse erro :-/
 const TransactionModel = require('../models/TransactionModel');
 
-const findAll = async () => {
+const findTransactionByPeriod = async (period) => {
   try {
-    const transactions = await TransactionModel.find({});
-    console.log(transactions);
+    console.log(period);
+    const transactions = await TransactionModel.find(
+      { yearMonth: period },
+      { _id: 0 }
+    );
     return transactions;
   } catch (err) {
     console.log('erro em findAll');
   }
 };
 
-module.exports = findAll;
+module.exports = findTransactionByPeriod;
