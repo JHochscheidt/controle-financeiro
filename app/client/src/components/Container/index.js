@@ -5,13 +5,17 @@ import TransactionService from '../../services/TransactionService';
 
 export default function Container() {
   const [yearMonth, setYearMonth] = useState('2020-08');
-  const [transactions, setTransactions] = useState([]);
+  // const [transactions, setTransactions] = useState([]);
+  const [periods, setPeriods] = useState([]);
 
   useEffect(() => {
     // fazer consulta no banco e retornar as transactions
-    const distinctTransactions = TransactionService.getAll();
-    console.log(distinctTransactions);
-  }, []);
+    const getPeriods = async () => {
+      const periods = await TransactionService.getAll();
+      setPeriods(periods.data);
+    };
+    getPeriods();
+  }, [periods]);
 
   const handleChangeSelect = (event) => {
     console.log(event.target.value);
@@ -33,11 +37,9 @@ export default function Container() {
             onChange={handleChangeSelect}
             className="browser-default"
           >
-            {/* {transactions.map((transaction, key) => {
-              <option key={key} value={transaction.yearMonth}>
-                {transaction.yearMonth}
-              </option>;
-            })} */}
+            {periods.map((period, key) => {
+              return <option key={key}>{period}</option>;
+            })}
           </select>
         </label>
         <div>

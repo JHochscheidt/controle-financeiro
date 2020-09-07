@@ -1,7 +1,7 @@
 import http from '../http-common';
 
-const getAll = () => {
-  return http.get('/transaction');
+const getAll = async () => {
+  return await http.get('/transaction');
 };
 
 const get = (period) => {
