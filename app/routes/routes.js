@@ -8,12 +8,18 @@ const { reset } = require('nodemon');
 //se nao for passado periodo por parametro nao retorna nada
 transactionRouter.get('/', async (req, res) => {
   const { period } = req.query;
-  if (!period) res.send('O período é obrigatório. Ex.: ?period=yyyy-mm');
   try {
-    const transactions = await TransactionService.findTransactionByPeriod(
-      period
-    );
-    res.send(transactions);
+    // se nao for passado periodo busca por todos os periodos de forma distinta
+    if (!period) {
+      console.log('sem periodo');
+      const distinctTransactions = await TransactionService.findDistinctTransactions();
+      res.send(distinctTransactions);
+    } else {
+      const transactions = await TransactionService.findTransactionByPeriod(
+        period
+      );
+      res.send(transactions);
+    }
   } catch (err) {
     res.send(err);
   }

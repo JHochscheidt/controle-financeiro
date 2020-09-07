@@ -7,6 +7,17 @@ const ObjectId = mongoose.Types.ObjectId;
 // descobrir esse erro :-/
 const TransactionModel = require('../models/TransactionModel');
 
+// tras as transactions de forma distinta
+exports.findDistinctTransactions = async () => {
+  try {
+    console.log('opaa');
+    const transactions = await TransactionModel.distinct('yearMonth');
+    return transactions;
+  } catch (err) {
+    return err;
+  }
+};
+
 // filtra transactions por yyyy-dd
 exports.findTransactionByPeriod = async (period) => {
   try {
