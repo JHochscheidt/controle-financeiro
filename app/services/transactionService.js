@@ -10,7 +10,6 @@ const TransactionModel = require('../models/TransactionModel');
 // tras as transactions de forma distinta
 exports.findDistinctTransactions = async () => {
   try {
-    console.log('opaa');
     const transactions = await TransactionModel.distinct('yearMonth');
     return transactions;
   } catch (err) {

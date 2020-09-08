@@ -8,9 +8,9 @@ const TransactionModel = require('../models/TransactionModel');
 transactionRouter.get('/', async (req, res) => {
   const { period } = req.query;
   try {
+    console.log(period);
     // se nao for passado periodo busca por todos os periodos de forma distinta
-    if (!period) {
-      console.log('sem periodo');
+    if (typeof period === 'undefined') {
       const distinctTransactions = await TransactionService.findDistinctTransactions();
       res.send(distinctTransactions);
     } else {

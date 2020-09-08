@@ -5,7 +5,7 @@ const getAll = async () => {
 };
 
 const get = (period) => {
-  return http.get(`/transaction/?period=${period}`);
+  return http.get(`/transaction?period=${period}`);
 };
 
 const create = (data) => {

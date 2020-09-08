@@ -45,7 +45,22 @@ form>div>button {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin: 5px 15px;
-  border: solid 1px lightgreen;
+  margin: 5px 5px;
+  padding: 0 15px;
+
   border-radius: 5px;
+}
+
+.positive {
+  background-color: #A1F0DC;
+}
+
+.negative {
+  background-color: #F0A1A8;
+
+}
+
+.options span {
+  margin: 0 5px;
+  cursor: pointer;
 }

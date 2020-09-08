@@ -4,22 +4,38 @@ import './style.css';
 import TransactionService from '../../services/TransactionService';
 
 export default function Container() {
-  const [yearMonth, setYearMonth] = useState('2020-08');
-  // const [transactions, setTransactions] = useState([]);
+  const [yearMonth, setYearMonth] = useState('');
+  const [transactions, setTransactions] = useState([]);
   const [periods, setPeriods] = useState([]);
 
   useEffect(() => {
-    // fazer consulta no banco e retornar as transactions
+    // fazer consulta no banco e retornar os periodos
     const getPeriods = async () => {
       const periods = await TransactionService.getAll();
       setPeriods(periods.data);
     };
-    getPeriods();
-  }, [periods]);
+    const getTransactions = async () => {
+      const filteredTransactions = await TransactionService.get(yearMonth);
+      setTransactions(filteredTransactions.data);
+    };
+    const date = new Date();
+    let month = date.getMonth() + 1;
+    month.toString().length === 1 ? (month = '0' + month) : (month = month);
+    const year = date.getFullYear().toString();
 
-  const handleChangeSelect = (event) => {
-    console.log(event.target.value);
+    setYearMonth(`${year}-${month}`);
+    getPeriods();
+    getTransactions();
+  }, []);
+
+  const handleChangeSelect = async (event) => {
+    //tras as transactions de acordo com o periodo selecionado
+
     setYearMonth(event.target.value);
+    const filteredTransactions = await TransactionService.get(
+      event.target.value
+    );
+    setTransactions(filteredTransactions.data);
   };
 
   return (
@@ -48,9 +64,19 @@ export default function Container() {
       </form>
       {/* INFOS FILTRO */}
       <div className="resume">
-        <span>Lançamentos: </span>
-        <span>Receitas:</span>
-        <span>Despesas:</span>
+        <span>Lançamentos: {transactions.length} </span>
+        <span>
+          Receitas: R$
+          {transactions
+            .filter((transaction) => transaction.type === '+')
+            .reduce((acc, curr) => acc + curr.value, 0)}
+        </span>
+        <span>
+          Despesas: R$
+          {transactions
+            .filter((transaction) => transaction.type === '-')
+            .reduce((acc, curr) => acc + curr.value, 0)}
+        </span>
         <span>Saldo:</span>
       </div>
 
@@ -66,66 +92,37 @@ export default function Container() {
         />
       </div>
       <div className="transactions">
-        <div className="transaction">
-          <div className="number">
-            <span>01</span>
-          </div>
-          <div className="info">
-            <div className="category">
-              <span>Lazer</span>
+        {transactions.map((transaction, key) => {
+          const { category, description, value, type } = transaction;
+          const styles = type === '-' ? 'negative' : 'positive';
+
+          return (
+            <div key={key} className={`transaction ${styles}`}>
+              <div className="number">
+                <span>{key + 1}</span>
+              </div>
+              <div className="info">
+                <div className="category">
+                  <span>{category}</span>
+                </div>
+                <div className="description">
+                  <span>{description}</span>
+                </div>
+              </div>
+              <div className="valor">
+                <span>{value}</span>
+              </div>
+              <div className="options">
+                <span>
+                  <i className="tiny material-icons">edit</i>
+                </span>
+                <span>
+                  <i className="tiny material-icons">delete</i>
+                </span>
+              </div>
             </div>
-            <div className="description">
-              <span>Viagem para a praia</span>
-            </div>
-          </div>
-          <div className="valor">
-            <span>R$10,00</span>
-          </div>
-          <div className="options">
-            <span>Edit</span>
-            <span>Delete</span>
-          </div>
-        </div>
-        <div className="transaction">
-          <div className="number">
-            <span>01</span>
-          </div>
-          <div className="info">
-            <div className="category">
-              <span>Lazer</span>
-            </div>
-            <div className="description">
-              <span>Viagem para a praia</span>
-            </div>
-          </div>
-          <div className="valor">
-            <span>R$10,00</span>
-          </div>
-          <div className="options">
-            <span>Edit</span>
-            <span>Delete</span>
-          </div>
-        </div>
-        <div className="transaction">
-          <div className="number">
-            <span>01</span>
-          </div>
-          <div className="info">
-            <div className="category">
-              <span>Lazer</span>
-            </div>
-            <div className="description">
-              <span>Viagem para a praia</span>
-            </div>
-          </div>
-          <div className="valor">
-            <span>R$10,00</span>
-          </div>
-          <div className="options">
-            <span>Edit</span>
-            <span>Delete</span>
-          </div>
-        </div>
+          );
+        })}
       </div>
     </div>
   );
