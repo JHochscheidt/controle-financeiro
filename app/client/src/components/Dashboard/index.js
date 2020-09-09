@@ -3,16 +3,16 @@ import './style.css';
 
 import TransactionService from '../../services/TransactionService';
 import Transaction from '../Transaction';
-// import ModalTransaction from '../ModalTransaction';
+import ModalTransaction from '../ModalTransaction';
 
 export default function Dashboard() {
   const [yearMonth, setYearMonth] = useState('');
   const [transactions, setTransactions] = useState([]);
   const [filteredTransactions, setFilteredTransactions] = useState([]);
   const [periods, setPeriods] = useState([]);
-  // // const [modalNewTransactionIsOpen, setModalNewTransactionIsOpen] = useState(
-  //   false
-  // );
+  const [modalNewTransactionIsOpen, setModalNewTransactionIsOpen] = useState(
+    false
+  );
 
   //initialState yearMonth
   useEffect(() => {
@@ -60,8 +60,8 @@ export default function Dashboard() {
     if (index < periods.length - 1) setYearMonth(periods[index + 1]);
   }
 
-  function handleClickNewTransaction() {
-    // setModalNewTransactionIsOpen(true);
+  function handleClickNewTransaction(isOpen) {
+    setModalNewTransactionIsOpen(isOpen);
   }
 
   function handleFilterDescription(event) {
@@ -137,9 +137,12 @@ export default function Dashboard() {
         <button onClick={handleClickNewTransaction}>
           <span>+</span> Novo Lançamento
         </button>
-        {/* {modalNewTransactionIsOpen && (
-          <ModalTransaction isOpen={modalNewTransactionIsOpen} />
-        )} */}
+        {modalNewTransactionIsOpen && (
+          <ModalTransaction
+            opened={handleClickNewTransaction}
+            transaction={{}}
+          />
+        )}
 
         <input
           type="text"

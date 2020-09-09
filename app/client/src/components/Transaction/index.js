@@ -1,6 +1,7 @@
 import React from 'react';
 
 import './style.css';
+// import ModalTransaction from '../ModalTransaction';
 
 export default function Transaction(transaction) {
   const { category, description, value, type, day } = transaction.transaction;
