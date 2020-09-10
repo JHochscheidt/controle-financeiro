@@ -13,7 +13,7 @@ const create = (data) => {
 };
 
 const update = (id, data) => {
-  return http.put(`/transaction/${id}`, data);
+  return http.patch(`/transaction/${id}`, data);
 };
 
 const remove = (id) => {

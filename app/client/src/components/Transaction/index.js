@@ -1,10 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import './style.css';
-// import ModalTransaction from '../ModalTransaction';
+import ModalTransaction from '../ModalTransaction';
+import TransactionService from '../../services/TransactionService';
 
-export default function Transaction(transaction) {
-  const { category, description, value, type, day } = transaction.transaction;
+export default function Transaction({ transaction }) {
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const { category, description, value, type, day } = transaction;
+
+  function handleClickEditModal(isOpen) {
+    setModalIsOpen(isOpen);
+  }
+
+  async function handleClickDeleteModal() {
+    const { _id } = transaction;
+    const deletedTransaction = await TransactionService.remove(_id);
+    console.log(deletedTransaction);
+  }
 
   const styles = type === '+' ? 'positive' : 'negative';
 
@@ -30,13 +42,20 @@ export default function Transaction(transaction) {
         </span>
       </div>
       <div className="options">
-        <span>
+        <span onClick={handleClickEditModal}>
           <i className="tiny material-icons">edit</i>
         </span>
-        <span>
+        <span onClick={handleClickDeleteModal}>
           <i className="tiny material-icons">delete</i>
         </span>
       </div>
+      {modalIsOpen && (
+        <ModalTransaction
+          opened={handleClickEditModal}
+          objTransaction={transaction}
+          typeOperation={'Edição'}
+        />
+      )}
     </div>
   );
 }

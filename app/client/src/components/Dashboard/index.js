@@ -33,8 +33,13 @@ export default function Dashboard() {
     };
     const getTransactions = async () => {
       const filteredTransactions = await TransactionService.get(yearMonth);
-      setTransactions(filteredTransactions.data);
-      setFilteredTransactions(filteredTransactions.data);
+      console.log(filteredTransactions);
+      let transactions = filteredTransactions.data;
+
+      transactions = transactions.sort((a, b) => a.day - b.day);
+
+      setTransactions(transactions);
+      setFilteredTransactions(transactions);
     };
 
     getPeriods();
@@ -55,6 +60,7 @@ export default function Dashboard() {
     const index = periods.findIndex((period) => period === yearMonth);
     if (index > 0) setYearMonth(periods[index - 1]);
   }
+
   function handleChangeButtonNextPeriod() {
     const index = periods.findIndex((period) => period === yearMonth);
     if (index < periods.length - 1) setYearMonth(periods[index + 1]);
@@ -140,7 +146,7 @@ export default function Dashboard() {
         {modalNewTransactionIsOpen && (
           <ModalTransaction
             opened={handleClickNewTransaction}
-            transaction={{}}
+            typeOperation={'Inclusão'}
           />
         )}
 
